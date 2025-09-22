@@ -1,4 +1,4 @@
-# mailauth-auditor
+# email-auth-auditor
 
 A fast, no-nonsense CLI to audit **SPF, DKIM, and DMARC** for any domain.
 
