@@ -1,0 +1,4 @@
+colored>=2.2
+tabulate>=0.9
+dnspython>=2.4
+idna>=3.6
