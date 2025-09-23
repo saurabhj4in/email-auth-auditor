@@ -1,76 +1,25 @@
 # email-auth-auditor
 
-A fast, no-nonsense CLI to audit **SPF, DKIM, and DMARC** for any domain.
-
-- Clean, **colorized** terminal output (via [`colored`](https://pypi.org/project/colored/)) in simple **psql-style** tables
-- Heuristics for SPF strength & DNS lookup count
-- DMARC policy/alignment/reporting parsing with practical guidance
-- DKIM selector probing with rough key-size estimation
-- Optional hygiene checks: **BIMI** and **MTA-STS**
-- **Risk score** (0–100) + exit codes (great for CI)
-- Also supports **JSON** and **Markdown** output
+**Fast, no-nonsense CLI** to audit **SPF • DKIM • DMARC** for any domain — colorized console tables, JSON/Markdown output, and a risk score for CI.
 
 ---
 
-## Requirements
-
-- Python **3.9+**
-- Network/DNS access (the tool queries public DNS)
-- A modern terminal that supports ANSI colors (most Linux/macOS shells, Windows Terminal, PowerShell 7+)
-
----
-
-## Installation
-
-Create a virtual environment (recommended) and install dependencies.
+## Quick install & run
 
 ```bash
+# clone
+git clone https://github.com/saurabhj4in/email-auth-auditor.git
+cd email-auth-auditor
+
+# optional: create a venv
 python3 -m venv .venv
-source .venv/bin/activate        # Windows: .venv\Scripts\activate
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
+
+# install
 python3 -m pip install -r requirements.txt
-```
 
----
-
-## Usage
-
-```text
-usage: audit_email_auth.py [-h] -d DOMAIN [-s [SELECTORS ...]] [-f {table,markdown,json}] [--timeout TIMEOUT] [--lifetime LIFETIME] [--no-extras]
-
-options:
-  -d, --domain        Domain to check (e.g., example.com)
-  -s, --selectors     DKIM selectors to try (default: default google selector1 selector2 s1 s2 mail mx)
-  -f, --format        Output format: table (colorized psql), markdown, json  [default: table]
-  --timeout           DNS query timeout in seconds (default: 3.0)
-  --lifetime          Total time for DNS query resolution (default: 5.0)
-  --no-extras         Skip optional BIMI/MTA-STS checks
-```
-
-### Quick examples
-
-**Colorized console (default):**
-```bash
-python3 audit_email_auth.py -d example.com
-```
-
-**Try specific DKIM selectors:**
-```bash
-python3 audit_email_auth.py -d example.com -s default s1 s2
-```
-
-**Machine-readable JSON:**
-```bash
-python3 audit_email_auth.py -d example.com -f json | jq
-```
-
-**Markdown for tickets/reports:**
-```bash
-python3 audit_email_auth.py -d example.com -f markdown > audit.md
-```
-
-**Skip BIMI/MTA-STS checks:**
-```bash
-python3 audit_email_auth.py -d example.com --no-extras
+# run (example)
+python3 email-auth-auditor.py -d example.com
 ```
 
 ---
@@ -99,49 +48,40 @@ python3 audit_email_auth.py -d example.com --no-extras
 
 ---
 
+## Common usage
+```bash
+# default colored table
+python3 email-auth-auditor.py -d example.com
+
+# JSON for automation
+python3 email-auth-auditor.py -d example.com -f json
+
+# try specific DKIM selectors
+python3 email-auth-auditor.py -d example.com -s selector1 s2
+
+# skip BIMI/MTA-STS
+python3 email-auth-auditor.py -d example.com --no-extras
+```
+
+### Key flags
+- `-d, --domain` : domain to check (required)
+- `-s, --selectors` : DKIM selectors to probe
+- `-f, --format` : `table` (default) / `markdown` / `json`
+
+---
+
 ## Exit codes (for CI/CD)
 
 - `0` → **LOW** risk
 - `1` → **MEDIUM** risk
 - `2` → **HIGH** risk
 
-GitHub Actions example:
-```yaml
-- name: Mail auth audit
-  run: |
-    python3 audit_email_auth.py -d ${{ env.DOMAIN }} -f json > audit.json
-```
+---
+
+## Notes
+- Requires **Python 3.9+** and network/DNS access.
+- SPF lookup counting & DKIM key-size are heuristics — useful guidance, not guarantees.
 
 ---
 
-## Color not showing?
-
-- Ensure **`colored`** is installed (`pip install colored`)
-- Use a terminal that supports ANSI colors (Windows Terminal, PowerShell 7+, iTerm2, most Linux terminals)
-- Colors are applied in **table** mode; `markdown` and `json` are intentionally uncolored
-- Some terminals strip colors when piping; view directly in the terminal
-
----
-
-## Limitations
-
-- SPF DNS lookup counting is **approximate** (follows `include`/`redirect`, counts `a/mx/ptr/exists`)
-- DKIM key size is a **heuristic** based on the `p=` value; it cannot guarantee actual modulus size
-- DNS timeouts or filtered resolvers can affect results
-- The tool only performs **public DNS lookups** (no email sending, no private APIs)
-
----
-
-## Development
-
-- Linting/formatting is up to you; the script is a single, self-contained file: `audit_email_auth.py`
-- Useful improvements:
-  - Bulk mode (read domains from a file)
-  - CSV/HTML exporters
-  - Smarter DKIM key parsing
-
----
-
-## License
-
-MIT
+MIT © — concise, useful, ready for action.
