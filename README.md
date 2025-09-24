@@ -4,7 +4,7 @@
 
 ---
 
-## Quick install & run
+## Quick Install & Run
 
 ```bash
 # clone
@@ -24,7 +24,7 @@ python3 email-auth-auditor.py -d example.com
 
 ---
 
-## What it checks
+## What It Checks
 
 ### SPF
 - Finds the `v=spf1` record
@@ -48,7 +48,7 @@ python3 email-auth-auditor.py -d example.com
 
 ---
 
-## Common usage
+## Common Usage
 ```bash
 # default colored table
 python3 email-auth-auditor.py -d example.com
@@ -63,14 +63,14 @@ python3 email-auth-auditor.py -d example.com -s selector1 s2
 python3 email-auth-auditor.py -d example.com --no-extras
 ```
 
-### Key flags
+### Key Flags
 - `-d, --domain` : domain to check (required)
 - `-s, --selectors` : DKIM selectors to probe
 - `-f, --format` : `table` (default) / `markdown` / `json`
 
 ---
 
-## Exit codes (for CI/CD)
+## Exit Codes (for CI/CD)
 
 - `0` → **LOW** risk
 - `1` → **MEDIUM** risk
@@ -84,4 +84,4 @@ python3 email-auth-auditor.py -d example.com --no-extras
 
 ---
 
-MIT © — concise, useful, ready for action.
+MIT 
